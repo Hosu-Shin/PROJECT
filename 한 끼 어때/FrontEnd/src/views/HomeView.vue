@@ -9,7 +9,18 @@
               {{ item }}
             </option>
           </select>
+
+          <select class="form-select">
+            <option value="" selected>지역2</option>
+            <option value="" v-for="item in SubArea" :key="item">
+              {{ item }}
+            </option>
+          </select>
         </div>
+      </div>
+
+      <div>
+
       </div>
   </div>
 </main>
@@ -21,6 +32,7 @@ export default {
   data() {
     return {
       RestArea: [],
+      SubArea: [],
     }
   },
   created() {
@@ -32,15 +44,29 @@ export default {
   methods: {
     async getRestArea() {
         const Addr = await this.$get('api/restArea', {})
-        // console.log(Addr);
-        
+        console.log(Addr);
         
         for(let i=0; i<Addr.length; i++){
-          let Addr1 = Addr[i].restAddr.split(' ');
-          this.RestArea[i] = Addr1[0]
+            let Addr1 = Addr[i].restAddr.split(' ');
+            // this.RestArea[i] = Addr1[0]
+            // this.SubArea[i] = Addr1[1]
+            
+              this.SubArea.push(Addr1[1]);
+              this.RestArea.push(Addr1[0]);
+
         }
-          console.log(RestArea);
+        this.RestArea = Array.from(new Set(this.RestArea))
+        this.SubArea = Array.from(new Set(this.SubArea))
+
+
+        Addr.forEach(item => {
+          Addr[item]
+          console.log(item.restAddr)
+        });
+
+        // console.log(Addr[1].restAddr);
     },
+
   }
 }
 </script>
