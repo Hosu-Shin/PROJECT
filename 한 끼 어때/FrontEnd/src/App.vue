@@ -29,6 +29,12 @@ export default{
     font-weight: normal;
     font-style: normal;
 }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
 #app {
   font-family: 'GmarketSansMedium';
   /* font-family: Avenir, Helvetica, Arial, sans-serif; */
@@ -36,6 +42,12 @@ export default{
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100%;
+}
+#wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 nav {
   padding: 30px;
