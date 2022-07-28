@@ -16,6 +16,9 @@
               {{ item }}
             </option>
           </select>
+
+          
+          
         </div>
       </div>
 
@@ -39,34 +42,29 @@ export default {
     this.getRestArea()
   },
   updated() {
-    
+    this.getRestArea()
   },
   methods: {
+    
     async getRestArea() {
-        const Addr = await this.$get('api/restArea', {})
-        console.log(Addr);
+        const Addr = await this.$get('api/selArea', {})
         
         for(let i=0; i<Addr.length; i++){
-            let Addr1 = Addr[i].restAddr.split(' ');
-            // this.RestArea[i] = Addr1[0]
-            // this.SubArea[i] = Addr1[1]
+            let Addr1 = Addr[i].area1
+            let Addr2 = Addr[i].area2
+            let Addr3 = Addr[i].area3
             
-              this.SubArea.push(Addr1[1]);
-              this.RestArea.push(Addr1[0]);
+              this.RestArea.push(Addr1);
+              this.SubArea.push(Addr2,Addr3);
 
         }
         this.RestArea = Array.from(new Set(this.RestArea))
         this.SubArea = Array.from(new Set(this.SubArea))
 
 
-        Addr.forEach(item => {
-          Addr[item]
-          console.log(item.restAddr)
-        });
-
         // console.log(Addr[1].restAddr);
     },
-
+    
   }
 }
 </script>
