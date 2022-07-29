@@ -7,6 +7,10 @@
             return $this->model->selArea();
         }
 
+        public function selRestaurant() {
+            return $this->model->selRestaurant();
+        }
+
         public function insBobF() {
             $json = getJson();
             print_r($json);

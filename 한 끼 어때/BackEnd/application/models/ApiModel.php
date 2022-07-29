@@ -10,6 +10,22 @@
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         }
 
+        public function selRestaurant() {
+            $sql = "SELECT 
+                        bobf.*,
+                        rest.rest_name, rest.rest_address,
+                        user.nick
+                    FROM bobf
+                        LEFT JOIN restaurant rest
+                        ON bobf.irest = rest.irest
+                        LEFT JOIN user
+                        ON bobf.iuser = user.iuser
+                    ";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        }
+
         public function insBobF(&$param) {
             $sql = "INSERT INTO bobf SET
                     irest = :irest, 
