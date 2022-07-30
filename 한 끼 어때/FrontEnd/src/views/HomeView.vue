@@ -1,6 +1,6 @@
 <template>
 <main>
-    <div>
+  <div>
 
       <div>
         <div>
@@ -20,12 +20,33 @@
               </option>
             </select>
           </div>
-
         </div>
       </div>
 
- 
-    
+      <div class="row">
+        <div class="col-xl-3 col-lg-4 col-md-6" :key="ibobf" v-for="ibobf in BobfList">
+          <div class="card" style="width: 18rem;">
+            <a style="cursor:pointer;">
+                <img
+                    alt="이미지" class="card-img-top">
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">{{ ibobf.title }}</h5>
+                <p class="card-text">
+                    <span class="badge bd-dark text-black me-1">{{ ibobf.nick }}</span>
+                </p>
+                <p class="card-text">
+                    <span class="badge bd-dark text-black" :key="item" v-for="item in BobfArea">{{ item[0] }}</span>
+                    <span class="badge bd-dark text-black" :key="item" v-for="item in BobfArea">{{ item[1] }}</span>
+                </p>
+                    <span class="card-text badge bd-dark text-black">{{ ibobf.cur_mem }} / {{ ibobf.total_mem }}</span>
+                <div class="d-flex justify-content-between align-ites-center">
+                    <small class="text-dark">{{  }}</small>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
 </main>
 </template>
@@ -40,14 +61,16 @@ export default {
       //지역
       RestArea: [],
       SubArea: [],
-
+      BobfList: [],
+      BobfArea: [],
     };
   },
   computed: {
   },
   created() {
     //지역
-    this.getRestArea()
+    this.getRestArea(),
+    this.selRestaurant()
   },
   updated() {
     this.getRestArea()
@@ -74,7 +97,16 @@ export default {
       this.SubArea = Array.from(new Set(this.SubArea))
     },
 
+    async selRestaurant() {
+      this.BobfList = await this.$post('api/selRestaurant', {});
 
+      const BobfArea = this.BobfList;
+
+      for(let i=0; i<BobfArea.length; i++) {
+        let Addr1 = BobfArea[i].rest_address.split(' '); 
+        this.BobfArea.push(Addr1);
+      }
+    },
   }
 }
 </script>
