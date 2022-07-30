@@ -7,8 +7,8 @@
           <div>
             <select class="form-select" @click="SubAreaChange()">
               <option value="" selected>시/도 선택</option>
-              <option value="{{ item }}" v-for="item in RestArea" :key="item">
-                <!-- {{ item }} -->
+              <option value="" v-for="item in RestArea" :key="item">
+                {{ item }}
               </option>
             </select>
             </div>
@@ -36,8 +36,7 @@
                     <span class="badge bd-dark text-black me-1">{{ ibobf.nick }}</span>
                 </p>
                 <p class="card-text">
-                    <span class="badge bd-dark text-black" :key="item" v-for="item in BobfArea">{{ item[0] }}</span>
-                    <span class="badge bd-dark text-black" :key="item" v-for="item in BobfArea">{{ item[1] }}</span>
+                    <span class="badge bd-dark text-black">{{ ibobf.rest_address.split(' ')[0] }}</span>
                 </p>
                     <span class="card-text badge bd-dark text-black">{{ ibobf.cur_mem }} / {{ ibobf.total_mem }}</span>
                 <div class="d-flex justify-content-between align-ites-center">
@@ -62,7 +61,6 @@ export default {
       RestArea: [],
       SubArea: [],
       BobfList: [],
-      BobfArea: [],
     };
   },
   computed: {
@@ -99,13 +97,6 @@ export default {
 
     async selRestaurant() {
       this.BobfList = await this.$post('api/selRestaurant', {});
-
-      const BobfArea = this.BobfList;
-
-      for(let i=0; i<BobfArea.length; i++) {
-        let Addr1 = BobfArea[i].rest_address.split(' '); 
-        this.BobfArea.push(Addr1);
-      }
     },
   }
 }
