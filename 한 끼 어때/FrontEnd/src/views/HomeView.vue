@@ -20,6 +20,19 @@
               </option>
             </select>
           </div>
+
+          <form>
+            <div>
+              <label for="party">밥 먹을 날 선택하기</label>
+              <input id="party" type="date" name="partydate" v-model="date"
+                    min="2022-01-01" max="2022-12-31"
+                    pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" required>
+                  <div>
+                    {{ date }}
+                  </div>
+            </div>
+          </form>
+
         </div>
       </div>
 
@@ -36,7 +49,9 @@
                     <span class="badge bd-dark text-black me-1">{{ ibobf.nick }}</span>
                 </p>
                 <p class="card-text">
-                    <span class="badge bd-dark text-black">{{ ibobf.rest_address.split(' ')[0] }}</span>
+                    <span class="badge bd-dark text-black">
+                      {{ ibobf.rest_address.split(' ')[0] }} {{ ibobf.rest_address.split(' ')[1] }}
+                      </span>
                 </p>
                     <span class="card-text badge bd-dark text-black">{{ ibobf.cur_mem }} / {{ ibobf.total_mem }}</span>
                 <div class="d-flex justify-content-between align-ites-center">
@@ -98,6 +113,7 @@ export default {
     async selRestaurant() {
       this.BobfList = await this.$post('api/selRestaurant', {});
     },
+
   }
 }
 </script>
