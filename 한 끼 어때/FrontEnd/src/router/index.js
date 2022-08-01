@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomeView from '../views/HomeView'
+import BobfWrite from '../views/BobfWrite'
 
 import LoginJoin from '../views/LoginJoin';
 import PassWord from '../views/PassWord';
@@ -11,6 +12,11 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/BobfWrite',
+    name: 'BobfWrite',
+    component: BobfWrite
   },
   {
     path: '/LoginJoin',

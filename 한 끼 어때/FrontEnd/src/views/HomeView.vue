@@ -20,20 +20,19 @@
               </option>
             </select>
           </div>
-
           <form>
             <div>
               <label for="party">밥 먹을 날 선택하기</label>
               <input id="party" type="date" name="partydate" v-model="date"
                     min="2022-01-01" max="2022-12-31"
                     pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" required>
-                  <div>
-                    {{ date }}
-                  </div>
             </div>
           </form>
-
         </div>
+      </div>
+
+      <div>
+        <router-link to="/BobfWrite">글쓰기 테스트 화면</router-link>
       </div>
 
       <div class="row">
@@ -76,6 +75,7 @@ export default {
       RestArea: [],
       SubArea: [],
       BobfList: [],
+      date:'',
     };
   },
   computed: {

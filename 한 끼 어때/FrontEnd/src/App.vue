@@ -3,7 +3,7 @@
 <template>
   <div id="wrap">
     <Header />
-    <router-link to="/">액시오스</router-link> |
+    <router-link to="/">액시오스ㅗ</router-link>
     <router-view/>
     <Footer />
   </div>
