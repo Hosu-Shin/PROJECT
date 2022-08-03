@@ -47,7 +47,7 @@
 
             <div class="">
                 <div class="">
-                    <button type="button" class="btn">취소</button>
+                    <button type="button" class="btn" @click="HomeView">취소</button>
                 </div>
                 <div class="">
                     <button type="button" class="btn" @click="insBobF">저장</button>

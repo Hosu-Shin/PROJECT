@@ -1,23 +1,12 @@
-
-
 <template>
-  <div id="wrap">
-    <Header />
-    <router-view/>
-    <router-link to="/BobfList">BobfList</router-link>
-    <Footer />
-  </div>
+
 </template>
 
 <script>
-import Header from './layout/Header';
-import Footer from './layout/Footer';
+
 
 export default{
-  components: { Header, Footer },
-  computed: {
 
-  }
 }
 </script>
 
@@ -28,13 +17,6 @@ export default{
     font-weight: normal;
     font-style: normal;
 }
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
 #app {
   font-family: 'GmarketSansMedium';
   /* font-family: Avenir, Helvetica, Arial, sans-serif; */
@@ -42,12 +24,6 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height: 100%;
-}
-#wrap {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 nav {
   padding: 30px;
