@@ -20,7 +20,7 @@
             </select>
 
             <select class="form-select" @change="BobfList" v-model="getBobfList" v-if="selectedAreaCate2 !== ''">
-              <option value="">제발.......그만해..이러다 다 죽어...</option>
+              <option value="">선택</option>
               <option :value="item" v-for="item in Areacate3List" :key="item">
                 {{ item }}
               </option>
