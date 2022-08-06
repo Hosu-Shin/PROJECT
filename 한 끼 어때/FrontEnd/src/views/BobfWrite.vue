@@ -27,14 +27,15 @@
                             {{ key }}
                         </option>
                     </select>
-                    <select class="form-select" v-model="RestList" v-if="selectedAreaCate1 !== ''">
-                        <option value="item.irest" v-for="item in RestList" :key="item.irest">
-                            {{item.rest_name}}
+                    <select class="form-select" @change="changeAreaCate2" v-model="selectedAreaCate2" v-if="selectedAreaCate1 !== ''">
+                        <option value="" >매장 선택</option>
+                        <option :value="item.irest" v-for="item in RestList" :key="item.irest">
+                            {{item.rest_name}} 
+                    <div class="">
+                        <input type="text" class="form-control" ref="irest" v-model="composition.irest">
+                    </div>
                         </option>
                     </select>
-                </div>
-                <div class="">
-                    <input type="text" class="form-control" ref="irest" v-model="composition.irest">
                 </div>
             </div>
 
@@ -79,7 +80,7 @@ export default {
             composition: {
                 title: '',
                 iuser: 1,
-                irest: 3,
+                irest: '',
                 partydt: '',
                 ctnt: '',
                 total_mem: '',
@@ -107,30 +108,42 @@ export default {
             },
             RestList: [],
             selectedAreaCate1: '',
+            selectedAreaCate2: '',
+            test: [],
         }
     },
     created() {
         this.selRestList()
     },
     methods: {
-        insBobF() {
-            const res = this.$post('api/insBobF', this.composition);
-            console.log("res: " + res);
-            this.$router.push( {path: '/'} );
+        changeAreaCate1() {
+            this.selectedAreaCate2 = ''
+            this.RestList = [];
+            this.selRestList();
         },
         async selRestList() {
+            this.test = [];
             const selectArea = this.AreaCate1[this.selectedAreaCate1];
-
-            const test = await this.$post('api/selRestList', {});
-            test.forEach( item => {
+            
+            const test2 = await this.$post('api/selRestList', {});
+            test2.forEach( item => {
                 if(item.rest_address.split(' ')[0] === selectArea)
-                this.RestList.push(item)
+                this.test.push(item)
             });
+            
+            this.RestList = new Set(this.test);
+
         },
-        changeAreaCate1() {
-            this.RestList = []
-            this.selRestList();
-        }
+        insBobF() {
+            const param = {};
+            if(this.selectedAreaCate2 !== '') {
+                this.composition.irest = this.selectedAreaCate2;
+                console.log(this.composition.irest)
+            }
+            const res = this.$post('api/insBobF', this.composition);
+            // console.log("res: " + res);
+            // this.$router.push( {path: '/'} );
+        },
         
     }
 }
