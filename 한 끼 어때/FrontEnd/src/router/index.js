@@ -1,15 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '@/store';
+
+import Main from '../views/Main';
+import SearchList from '../views/SearchList'
+
 import BobfWrite from '../views/BobfWrite'
 import BobfList from '../views/BobfList'
 
 import LoginJoin from '../views/LoginJoin';
 import PassWord from '../views/PassWord';
-import KakaoLogin from '../views/KakaoLogin';
-import NaverLogin from '../views/NaverLogin';
 
-import Main from '../views/Main';
-import store from '@/store';
+import Diary from '../views/Diary';
+import Profile from '../views/Profile';
+
+// import NaverLogin from '../views/NaverLogin';
+
 import MyPage from '../views/MyPage';
+import Join from '../views/Join';
 
 //네비게이션 가드
 const requireAuth = () => (to, from, next) => {
@@ -20,12 +27,16 @@ const requireAuth = () => (to, from, next) => {
   next();
 }
 
-
 const routes = [
   {
     path: '/',
     name: 'Main',
     component: Main
+  },
+  {
+    path: '/SearchList',
+    name: 'SearchList',
+    component: SearchList
   },
   {
     path: '/BobfList',
@@ -47,29 +58,32 @@ const routes = [
     name: 'PassWord',
     component: PassWord
   },
-  {
-    path: '/KakaoLogin',
-    name: 'KakaoLogin',
-    component: KakaoLogin
-  },
-  {
-    path: '/NaverLogin',
-    name:'NaverLogin',
-    component:NaverLogin
-  },
-  {
-    path:'/PassWord',
-    name: 'PassWord',
-    component: PassWord
-  },
+  // {
+  //   path: '/NaverLogin',
+  //   name:'NaverLogin',
+  //   component:NaverLogin
+  // },
   {
     path:'/MyPage',
     name: 'MyPage',
     component: MyPage
   },
-
+  {
+    path: '/Join',
+    name: 'Join',
+    component: Join
+  },
+  {
+    path:'/Diary',
+    name: 'Diary',
+    component:Diary
+  },
+  {
+    path:'/Profile',
+    name:'Profile',
+    component: Profile
+  }
 ];
-
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
