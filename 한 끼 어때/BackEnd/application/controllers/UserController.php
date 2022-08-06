@@ -12,7 +12,23 @@
             return [_RESULT => 0];
         }
 
-        public function logout(){
+        public function signin() {
+            $json = getJson();
+            $pw = $json['pw'];
+            $dbUser = $this->model->signin($json);
+            // if(!$dbUser || !password_verify($pw, $dbUser->pw)) { 비밀번호암호화하고나면이걸로
+            if(!$dbUser || $pw !== $dbUser->pw) {
+                return [_RESULT => 0];
+            }
+            $dbUser->pw = null;
+            $dbUser->regdt = null;
+            $dbUser->moddt = null;
+            // 메모리 차지하지 않게
+            $this->flash(_LOGINUSER, $dbUser);
+            return [_RESULT => $dbUser];
+        }
+
+        public function signout(){
             $this->flash(_LOGINUSER);
             return [_RESULT => 1];
         }

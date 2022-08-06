@@ -30,10 +30,10 @@
         }
     
         public function AreaCate3List(&$param) {
-            $sql = "SELECT area4 FROM area
+            $sql = "SELECT area3, area4 FROM area
                     WHERE area1 = :area1
                     AND area2 = :area2
-                    AND area3 = :area3
+                    OR area3 = :area3
                     GROUP BY area4";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(":area1", $param["area1"]);
@@ -42,7 +42,6 @@
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         }
-    
 
 
         //밥친구 리스트
@@ -73,7 +72,9 @@
                     ctnt = :ctnt, 
                     total_mem = :total_mem, 
                     cur_mem = :cur_mem, 
-                    img_path = :img_path
+                    img_path = :img_path,
+                    sido = :sido,
+                    gugun = :gugun
                     ";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(":irest", $param["irest"]);
@@ -84,21 +85,17 @@
             $stmt->bindValue(":total_mem", $param["total_mem"]);
             $stmt->bindValue(":cur_mem", $param["cur_mem"]);
             $stmt->bindValue(":img_path", $param["img_path"]);
+            $stmt->bindValue(":sido", $param["sido"]);
+            $stmt->bindValue(":gugun", $param["gugun"]);
             $stmt->execute();
             return intval($this->pdo->lastInserId());
         }
 
-
-        //검색카테고리
-        public function getSearchCategoryList() {
-            $sql = "SELECT a.*, b.icate2, b.midcate, c.imenu, c.menu
-                    FROM category1 a, category2 b, menu_cd c
-                    WHERE a.icate1 = b.icate1 and b.icate2 = c.icate2
-                    ORDER BY a.icate1 asc";
-            
+        public function selRestList() {
+            $sql = "SELECT * FROM restaurant";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute();
-    
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         }
+
     }
