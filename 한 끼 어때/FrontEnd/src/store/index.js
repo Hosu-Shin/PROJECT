@@ -5,8 +5,12 @@ export default createStore({
   state() {
     return {
       user: {},
-      searchList: {},
+      searchList: [],
       searchWord: '',
+      currentLoc: {},
+      restInfo: {},
+      restList: [],
+      bobfDetailInfo: {}
     }
   },
   getters: {
@@ -16,6 +20,12 @@ export default createStore({
     getSearchWord(state) {
       return state.searchWord;
     },
+    getCurrentLoc(state) {
+      return state.currentLoc;
+    },
+    getRestList(state) {
+      return state.restList;
+    }
   },
   mutations: {
     user: (state, data) => {
@@ -26,11 +36,24 @@ export default createStore({
     },
     setSearchWord: (state, data) => {
       state.searchWord = data
+    },
+    currentLoc: (state, data) => {
+      state.currentLoc = data
+    },
+    restList: (state, data) => {
+      state.restList = data
+    },
+    restInfo: (state, data) => {
+      state.restInfo = data
+    },
+    bobfDetailInfo: (state, data) => {
+      state.bobfDetailInfo = data
     }
+
   },
   plugins: [
     createPersistedState({
-      paths: ['user']
+      paths: ['user'],
     })
   ],
 })

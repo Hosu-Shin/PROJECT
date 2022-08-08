@@ -9,7 +9,7 @@ export default {
          lang: 'kr',
          units: 'metric',
       }
-    },
+   },
    methods: {
       async $post(url, data) {
          return (await axios({
@@ -44,6 +44,7 @@ export default {
             fr.readAsDataURL(file);
          });
       },
+
       async getWeather(lat, lon) {
          const parameter = {
             lat: lat,

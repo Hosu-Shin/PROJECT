@@ -31,10 +31,9 @@
             </div>
             <div v-else>
                 <div class="dropdown">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">My Page</a>     
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">My Page</a>    
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             <li><router-link class="" to="/MyPage"><a class="dropdown-item" href="#">마이페이지</a></router-link></li>
-                            <li><a class="dropdown-item" href="#">다이어리</a></li>
                         </ul>
                 </div>
                 <button class="btn btn-danger" type="button" @click="signout">로그아웃</button>
@@ -62,7 +61,10 @@ export default {
             return this.$store.state.user;
         },
         getSearchList() {
-            return this.$store.state.searchList;
+            return this.$store.state.getSearchList;
+        },
+        getCurrentLoc() {
+            return this.$store.getters.getCurrentLoc;
         }
     },
     created() {
@@ -73,16 +75,42 @@ export default {
             this.$store.commit('user', {});
             await this.$post('user/signout');
         },
-        async searchMenu() {
+        async searchMenu() {    //통신부분 개망....완전 일 많이 하는 중,,,근데 나누기.....힘들어요,,,,,,
             if(this.search.trim() !== '') {
                 const param = { search_word: this.search }
                 console.log(param)
-                // await this.$post('/search/searchLog', param);
-                this.searchList = await this.$post('search/menuCrawling', param);
-                console.log(this.searchList);
-                // this.emitter.emit('searchlist', this.search)
-                this.$store.commit('setSearchList', this.searchList);
-                this.$store.commit('setSearchWord', this.search);
+                // await this.$post('/search/searchLog', param);    //이거 검색기록임~ 나중에 주석 풀겨
+                // const result = await this.$post('search/menuCrawling', param);
+                //이거는 네이버에서 메뉴 가져오는 거 통신
+                const result = await this.$get(`https://map.naver.com/v5/api/search?caller=pcweb&query=${this.search}&type=all&searchCoord=${this.getCurrentLoc.lon};${this.getCurrentLoc.lat}&page=1&displayCount=20&isPlaceRecommendationReplace=true&lang=ko`);
+                const searchList = result['result']['place']['list']
+                let params = []
+                searchList.forEach(item => {    //for문 돌려서 데이터 가공쓰
+                    params.push({
+                        name: item.name,
+                        addr: item.address,
+                        cate2: item.category[0],
+                        tel: item.tel,
+                        menu: item.menuInfo,
+                        open_close: item.bizhourInfo,
+                        lon_x: item.x,
+                        lat_y: item.y,
+                        img_path: item.thumUrl
+                    })
+                });
+                params.push(this.search);
+                console.log(params)
+                //여기는 db에 검색해서 나온 내용 저장쓰
+                const rs = await this.$post('/search/searchList', params);
+                console.log(rs)
+
+                //여기는 그 뭐냐,,,검색하면 디비에 저장된 내용 가져와서 searchList.vue에 뿌려줄라고
+                const rs2 = await this.$get(`/search/restList/${this.search}`);
+                console.log(rs2["rs"]);
+                this.$store.commit('restList', rs2["rs"]);  //select 해온 결과 값 store에 저장
+                
+                this.$store.commit('setSearchList', params);    //네이버 결과 값 저장
+                this.$store.commit('setSearchWord', this.search);   //검색어 저장
                 this.$router.push( {path: '/SearchList'} );
                 this.search = ''
             }

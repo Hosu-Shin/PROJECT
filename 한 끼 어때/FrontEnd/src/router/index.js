@@ -4,8 +4,9 @@ import store from '@/store';
 import Main from '../views/Main';
 import SearchList from '../views/SearchList'
 
-import BobfWrite from '../views/BobfWrite'
 import BobfList from '../views/BobfList'
+import BobfDetail from '../views/BobfDetail'
+import BobfWrite from '../views/BobfWrite'
 
 import LoginJoin from '../views/LoginJoin';
 import PassWord from '../views/PassWord';
@@ -13,10 +14,9 @@ import PassWord from '../views/PassWord';
 import Diary from '../views/Diary';
 import Profile from '../views/Profile';
 
-// import NaverLogin from '../views/NaverLogin';
-
 import MyPage from '../views/MyPage';
 import Join from '../views/Join';
+import DiaryWrite from '../views/DiaryWrite';
 
 //네비게이션 가드
 const requireAuth = () => (to, from, next) => {
@@ -44,6 +44,11 @@ const routes = [
     component: BobfList
   },
   {
+    path: '/BobfDetail',
+    name: '/BobfDetail',
+    component: BobfDetail
+  },
+  {
     path: '/BobfWrite',
     name: 'BobfWrite',
     component: BobfWrite
@@ -58,11 +63,6 @@ const routes = [
     name: 'PassWord',
     component: PassWord
   },
-  // {
-  //   path: '/NaverLogin',
-  //   name:'NaverLogin',
-  //   component:NaverLogin
-  // },
   {
     path:'/MyPage',
     name: 'MyPage',
@@ -82,6 +82,11 @@ const routes = [
     path:'/Profile',
     name:'Profile',
     component: Profile
+  },
+  {
+    path:'/DiaryWrite',
+    name:'DiaryWrite',
+    component: DiaryWrite
   }
 ];
 
