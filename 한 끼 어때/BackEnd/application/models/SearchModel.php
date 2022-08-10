@@ -34,14 +34,20 @@
         public function getRestList(&$param) {
             $sql = "SELECT a.*, d.menu
                     FROM restaurant a, menu_list b, category2 c, menu_cd d
-                    WHERE a.irest = b.irest AND b.imenu = d.imenu AND d.icate2 = c.icate2 AND d.menu = :menu
+                    WHERE a.irest = b.irest AND b.imenu = d.imenu AND d.icate2 = c.icate2 AND d.menu LIKE :menu
                     GROUP BY a.irest";
             
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(":menu", $param["search_word"]);
+            $stmt->bindValue(":menu", "%".$param["search_word"]."%");
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_OBJ); 
+
+            //(6371*ACOS(COS(RADIANS(:lat_y))*COS(RADIANS(a.lat_y))*COS(RADIANS(a.lon_x)-RADIANS(:lon_x))+SIN(RADIANS(:lat_y))*SIN(RADIANS(a.lat_y)))) AS dis
+            //$stmt->bindValue(":lat_y", $param["lat_y"]);
+            //$stmt->bindValue(":lon_x", $param["lon_x"]);
+            //HAVING dis <= 1
+            //ORDER BY dis
         }
 
         //검색 로그 저장
