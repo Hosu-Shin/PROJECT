@@ -13,9 +13,8 @@ import PassWord from '../views/PassWord';
 
 import Diary from '../views/Diary';
 import Profile from '../views/Profile';
-
+import UpdateDiary from '../views/UpdateDiary';
 import MyPage from '../views/MyPage';
-import Join from '../views/Join';
 import DiaryWrite from '../views/DiaryWrite';
 
 //네비게이션 가드
@@ -44,8 +43,8 @@ const routes = [
     component: BobfList
   },
   {
-    path: '/BobfDetail',
-    name: '/BobfDetail',
+    path: '/BobfDetail/:ibobf',
+    name: 'BobfDetail',
     component: BobfDetail
   },
   {
@@ -69,11 +68,6 @@ const routes = [
     component: MyPage
   },
   {
-    path: '/Join',
-    name: 'Join',
-    component: Join
-  },
-  {
     path:'/Diary',
     name: 'Diary',
     component:Diary
@@ -87,6 +81,11 @@ const routes = [
     path:'/DiaryWrite',
     name:'DiaryWrite',
     component: DiaryWrite
+  },
+  {
+    path:'/UpdateDiary',
+    name:'UpdateDiary',
+    component: UpdateDiary
   }
 ];
 

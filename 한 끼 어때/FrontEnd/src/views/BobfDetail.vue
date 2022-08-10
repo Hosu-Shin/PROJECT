@@ -1,7 +1,15 @@
 <template>
-    <div>
-        {{user}}
-        {{bobfDetailInfo}}
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-6">
+                    🧡💛💚💙💜🤎🖤🤍
+                </div>
+                <div class="col-md-6">
+                    🤍🖤🤎💜💙💚💛🧡
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -9,8 +17,10 @@
 export default {
     data() {
         return {
-
         }
+    },
+    created() {
+        this.test()
     },
     computed: {
         user() {
@@ -19,11 +29,16 @@ export default {
         bobfDetailInfo() {
             return this.$store.state.bobfDetailInfo;
         }
-
+    },
+    component: {
+    },
+    methods: {
+        test() {
+            console.log(this.$route.params)
+        }
     },
 }
 </script>
 
 <style>
-
 </style>

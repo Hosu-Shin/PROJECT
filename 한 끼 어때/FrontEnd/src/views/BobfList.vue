@@ -53,12 +53,11 @@
       </div>
 
       <div class="row">
-        <div class="col-xl-3 col-lg-4 col-md-6" :key="ibobf" v-for="ibobf in BobfList">
+        <div class="col-xl-3 col-lg-4 col-md-6" :key="ibobf" v-for="ibobf in paginatedData">
           <div class="card" style="width: 18rem;" @click="goDetail">
-            <a @click="goToDetail(ibobf)" style="cursor:pointer;">
+            <a @click="goToDetail(ibobf.ibobf)" style="cursor:pointer;">
               <a style="cursor:pointer;">
-                  <img
-                      alt="이미지" class="card-img-top">
+                  <img alt="이미지" class="card-img-top" :src="`/static/img/bobf/${ibobf.img_path}`">
               </a>
               <div class="card-body">
                   <h5 class="card-title">{{ ibobf.title }}</h5>
@@ -67,7 +66,7 @@
                   </p>
                   <p class="card-text">
                       <span class="badge bd-dark text-black">
-                        {{ ibobf.rest_address }}
+                        {{ ibobf.sido }} / {{ ibobf.gugun}}
                         </span>
                   </p>
                       <span class="card-text badge bd-dark text-black">{{ ibobf.cur_mem }} / {{ ibobf.total_mem }}</span>
@@ -79,6 +78,13 @@
           </div>
         </div>
       </div>
+
+      <div class="">
+        <button class="" :disabled="pageNum === 0" @click="prevPage">이전</button>
+        <span class="page-count">{{ pageNum + 1 }} / {{ pageCount }} 페이지</span>
+        <button class="" :disabled="pageNum >= pageCount - 1" @click="nextPage">다음</button>
+      </div>
+
     </div>
   </div>
 </main>
@@ -111,56 +117,69 @@ export default {
                 "광주광역시": "광주",
                 "제주특별자치도": "제주"
             },
-      RestArea: [],
-      SubArea: [],
-      BobfList: [],
-      date:'',
-      aaa:'',
       AreaCate1List: [],
       AreaCate2List: [],
-      // AreaCate3List: [],
+      AreaCate3List: [],
       // AreaCate4List: [],
+
       selectedAreaCate1: '',
       selectedAreaCate2: '',
-      // selectedAreaCate3: '',
+      selectedAreaCate3: '',
       // selectedAreaCate4: '',
+
+      BobfList: [],
+      date:'',
+
+    //페이징
+      pageNum: 0,
+      pageSize: 8
     };
   },
+  props: {
+  },
   computed: {
+  //페이징
+    pageCount() {
+      let listLeng = this.BobfList.length,
+          listSize = this.pageSize,
+          page = Math.floor((listLeng - 1) / listSize) + 1;
+      // if(listLeng % listSize > 0) page +=  1;
+
+      return page;
     },
+    paginatedData() {
+      const start = this.pageNum * this.pageSize,
+            end = start + this.pageSize;
+
+      return this.BobfList.slice(start, end);
+    }
+  },
   created() {
     //지역
-    this.getRestArea();
     this.getBobfList();
   },
   methods: {
-    async selBobfList() {
-      this.BobfList = await this.$post('api/selBobfList', {});
-    },
 
-    //지역 카테고리
-    async getRestArea() {
-      const Addr = await this.$get('api/selArea', {});
-      // console.log(Addr);
-    },
-    
+  //카테고리 메소드
     changeAreaCate1() {
         this.selectedAreaCate2 = '';
-        // this.selectedAreaCate3 = '';
+        this.selectedAreaCate3 = '';
         // this.selectedAreaCate4 = '';
+
         this.Areacate2List = [];
-        // this.Areacate3List = [];
+        this.Areacate3List = [];
 
         this.getAreaCate2List(this.selectedAreaCate1);
         this.getBobfList();
     },
-    // changeAreaCate2() {
-    //   this.selectedAreaCate3 = '';
-    //   this.selectedAreaCate4 = '';
-    //   this.AreaCate3List = [];
-    //   this.getAreaCate3List(this.selectedAreaCate1, this.selectedAreaCate2);
-    //   this.getBobfList();
-    // },
+
+    changeAreaCate2() {
+      this.selectedAreaCate3 = '';
+      this.selectedAreaCate4 = '';
+      this.AreaCate3List = [];
+      this.getAreaCate3List(this.selectedAreaCate1, this.selectedAreaCate2);
+      this.getBobfList();
+    },
     // changeAreaCate3() {
     //   this.selectedAreaCate4 = '';
     //   this.AreaCate4List = [];
@@ -186,73 +205,106 @@ export default {
 
     },
 
-    // async getAreaCate3List(area1, area2_5) {
-    //   const area3 = await this.$get(`api/AreaCate3List/${area1}/${area2_5}`, {});
+    async getAreaCate3List(area1, area2_5) {
+      const area3 = await this.$get(`api/AreaCate3List/${area1}/${area2_5}`, {});
       
-    //   area3.forEach(item => {
-    //     if(item.area3 !== '' && item.area3 !== area2_5) {
-    //         this.AreaCate3List.push(item["area3"]);
-    //     } else if(item.area3 !== '' && item.area3 === area2_5 || item.area3 === '' && item.area4 !== '' ){
-    //       this.AreaCate3List.push(item["area4"]);
-    //     }
-    //   })
+      area3.forEach(item => {
+        if(item.area3 !== '' && item.area3 !== area2_5) {
+            this.AreaCate3List.push(item["area3"]);
+        } else if(item.area3 !== '' && item.area3 === area2_5 || item.area3 === '' && item.area4 !== '' ){
+          this.AreaCate3List.push(item["area4"]);
+        }
+      })
 
-    //   if(this.AreaCate3List.length === 0) {
-    //     this.AreaCate3List = []
-    //   } else {
-    //     this.AreaCate3List = new Set(this.AreaCate3List);
-    //   }
+      if(this.AreaCate3List.length === 0) {
+        this.AreaCate3List = []
+      } else {
+        this.AreaCate3List = new Set(this.AreaCate3List);
+      }
 
-    // },
-    // async getAreaCate4List(area1, area2_5) {
-    //   const area4 = await this.$get(`api/AreaCate3List/${area1}/${area2_5}`, {});
+    },
+
+    /*
+    async getAreaCate4List(area1, area2_5) {
+      const area4 = await this.$get(`api/AreaCate3List/${area1}/${area2_5}`, {});
       
-    //   area4.forEach(item => {
-    //     if(item.area3 !== '' && item.area3 !== area2_5) {
-    //         this.AreaCate4List.push(item['area4']);
-    //     }
-    //   })
-    // },
+      area4.forEach(item => {
+        if(item.area3 !== '' && item.area3 !== area2_5) {
+            this.AreaCate4List.push(item['area4']);
+        }
+      })
+    },
+    */
     
-  
 
+  //밥친구 리스트 메소드
     async getBobfList() {
-      const select1 = this.AreaCate1[this.selectedAreaCate1];
-      const select2 = this.selectedAreaCate2;
+      // const select1 = this.AreaCate1[this.selectedAreaCate1];
       // const select3 = this.selectedAreaCate3;
       // const select4 = this.selectedAreaCate4;
-      console.log("test[select1]: " + this.AreaCate1[select1]);
+
+      const select1 = this.selectedAreaCate1;
+      const select2 = this.selectedAreaCate2;
+
       const param = {};
       if(select1 !== '') {
         param.area1 = select1;
-        console.log(param);
       }
       if(select2 !== '') {
         param.area2 = select2;
-        console.log(param);
       }
 
-      
-      this.BobfList = await this.$get('api/selBobfList', param);
-    
+      //시/도 선택 -> 관련 시/도 내용만 뜸
+      if(!select1) {
+        this.BobfList = await this.$get('api/selBobfList', param);
+      } else {
+        const select1List = await this.$get('api/selBobfList', param);
 
-      // test.forEach(item => {
-      //   if(item.rest_address.split(' ')[0] === select1 ) {
-      //     this.BobfList = [];
-      //     console.log(item)
-      //     this.BobfList.push(item)
-      //   }
-      // })
-      // this.BobfList = await this.$get('api/selBobfList', param);
+        const sidoListCard = [];
+          select1List.forEach(item => {
+            if(item.sido === select1) {
+              sidoListCard.push(item);
+            }
+          })
+        this.BobfList = sidoListCard;
+      }
+
+      //구/군 선택 -> 관련 구/군 내용만 뜸
+      if(select1 && select2) {
+        const select1List = await this.$get('api/selBobfList', param);
+        const gugunListCard = [];
+        select1List.forEach(item => {
+          if(item.gugun === select2) {
+            gugunListCard.push(item);
+          }
+        })
+        this.BobfList = gugunListCard;
+      } 
+
     },
 
+
+  //글 상세페이지 이동 메소드
     goToDetail(ibobf) {
       const res = ibobf
       console.log("res :", res)
-      this.$store.commit('bobfDetailInfo', res)
-      this.$router.push( {path: '/BobfDetail'} );
+      this.$router.push( {name: 'BobfDetail', params: { ibobf: res }} );
+      // this.$router.push( {path: '/BobfDetail/ibobf'} );
+    },
+
+    
+  //페이징
+    nextPage() {
+      this.pageNum += 1;
+    },
+    prevPage() {
+      this.pageNum -= 1;      
     },
 
   }
+
 }
 </script>
+
+<style scoped>
+</style>
