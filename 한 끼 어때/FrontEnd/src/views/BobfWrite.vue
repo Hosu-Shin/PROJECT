@@ -166,6 +166,10 @@ export default {
                 sido: '',
                 gugun: '',
             },
+            //수정
+            ibobf: '',
+
+
             
             //가게 검색 모달
             showModal: false,
@@ -211,15 +215,13 @@ export default {
 
             //이미지
 
-
         }
     },
     created() {
-        // this.selRestList()
-
         this.getNowDate()
         this.searchList = this.getSearchList
         this.searchWord = this.getSearchWord
+        this.updateBobf()
     },
     updated() {
 
@@ -329,7 +331,6 @@ export default {
             let image = '';
             if(this.$refs.bobfImg.files.length !== 0) {
                 image = await this.$base64(this.$refs.bobfImg.files[0]);
-                console.log(image);
             }
 
             this.composition.iuser = this.user.iuser
@@ -343,11 +344,16 @@ export default {
             if(this.selectedAreaCate2 !== '') {
                 this.composition.irest = this.selectedAreaCate2;
             }
-            
-            const res = await this.$post('api/insBobF', this.composition)
-            console.log(res)
+
+            let res;
+            if(this.$route.params.ibobf) {
+                res = await this.$post('api/updateBobfDetail', this.composition)
+            } else {        
+                res = await this.$post('api/insBobF', this.composition)
+            }
 
             if( res.result ) {
+                this.$swal.fire('🥕글쓰기 성공🥕', '글이 등록되었습니다', 'success')
                 this.$router.push( {path: '/BobfList'} );
             } else if ( this.composition.title === null || this.composition.title === '' ) {
                 this.$refs.title.focus()
@@ -357,6 +363,25 @@ export default {
             }
             
         },
+        async updateBobf() {
+
+            if(this.$route.params.ibobf) {
+                const ibobf = this.$route.params.ibobf;
+                const detail = await this.$post(`api/selBobfDetail/`, { ibobf })
+                if(detail) {
+                    this.ibobf                  = ibobf;
+                    this.restInfo.name          = detail.restname;
+                    this.sido                   = detail.sido;
+                    this.gugun                  = detail.gugun;
+                    this.user.iuser             = detail.iuser;
+                    this.composition.title      = detail.title;
+                    this.composition.ctnt       = detail.ctnt;
+                    this.composition.partydt    = detail.partydt;
+                    this.composition.img        = detail.img_path;
+                    this.composition.total_mem  = detail.total_mem;
+                }
+        }}
+    
 
 
         //이미지 업로드
