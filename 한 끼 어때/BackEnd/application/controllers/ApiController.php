@@ -80,6 +80,47 @@
             return [_RESULT => $this->model->insBobF($json)];
         }
 
+        public function selBobfDetail() {
+            $json = getJson();
+            // $rs = $this->model->selBobfDetail($json);
+            // return ["result" => $rs];
+            return $this->model->selBobfDetail($json);
+        }
+
+        public function delBobfDetail() {
+            $json = getJson();
+
+            try {
+                $json = getJson();
+                $this->model->beginTransaction();
+                $result = $this->model->delBobfDetail($json);
+                if($result === 1) {
+                    //이미지 삭제
+                    if($json["img_path"] !== ''){
+                        unlink(_IMG_PATH . "/" . "bobf" . "/" .  $json["img_path"]);    
+                    }
+                    $this->model->commit();
+                }
+                else {
+                    $this->model->rollback();    
+                }
+            } catch(Exception $e) {
+                print "에러발생<br>";
+                print $e . "<br>";
+                $this->model->rollback();
+            }
+
+            return [_RESULT => $result];
+        }
+
+        public function updateBobfDetail() {
+            $json = getJson();
+
+            return [_RESULT => $this->model->updateBobfDetail($json)];
+        }
+
+
+
         public function selRestList() {
             return $this->model->selRestList();
         }
