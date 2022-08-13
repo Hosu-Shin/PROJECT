@@ -7,6 +7,8 @@ import SearchList from '../views/SearchList'
 import BobfList from '../views/BobfList'
 import BobfDetail from '../views/BobfDetail'
 import BobfWrite from '../views/BobfWrite'
+import BobfChat from '../views/BobfChat'
+import BobfChatView from '@/components/BobfChatView'
 
 import LoginJoin from '../views/LoginJoin';
 import PassWord from '../views/PassWord';
@@ -14,6 +16,7 @@ import PassWord from '../views/PassWord';
 import Diary from '../views/Diary';
 import Profile from '../views/Profile';
 import DiaryWrite from '../views/DiaryWrite';
+
 
 //네비게이션 가드
 const requireAuth = () => (to, from, next) => {
@@ -51,6 +54,16 @@ const routes = [
     component: BobfWrite
   },
   {
+    path: '/BobfChat',
+    name: 'BobfChat',
+    component: BobfChat
+  },
+  {
+    path: '/BobfChatView',
+    name: 'BobfChatView',
+    component: BobfChatView
+  },
+  {
     path: '/LoginJoin',
     name: 'LoginJoin',
     component: LoginJoin
@@ -75,6 +88,7 @@ const routes = [
     name:'DiaryWrite',
     component: DiaryWrite
   },
+  
 ];
 
 const router = createRouter({
