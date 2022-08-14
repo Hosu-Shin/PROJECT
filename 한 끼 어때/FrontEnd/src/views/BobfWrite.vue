@@ -2,12 +2,18 @@
     <main class="">
         <div class="container">
             <h2 class="text-center">~ 글 쓰기 ~</h2>
-
-            <div>💛저만의 작고 소중한 테스트 공간입니다💛</div>
             <input type="hidden" v-model="composition.ibobf">
+
+            <div class="mb-3 row">
+                <label for="" class="col-md-3 col-form-label">제목</label>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" ref="title" v-model="composition.title">
+                </div>
+            </div>
+
                 <div>
                     <div class="mb-3 row">
-                        <label for="" class="col-md-3 col-form-label">Image</label>
+                        <label for="" class="col-md-3 col-form-label">이미지</label>
                         <div class="col-md-9">
                             <div class="row">
                                 <!-- <div class="col-lg-3 col-md-4 col-sm-2" 
@@ -25,27 +31,19 @@
                     </div>
                 </div>
 
-            <div class="">
-                <label for="" class="form-label">제목</label>
-                <div class="">
-                    <input type="text" class="form-control" ref="title" v-model="composition.title">
-                </div>
-            </div>
-
-            <div class="">
-                <!-- <label for="" class="form-label"></label> -->
                 <div class="">
                     <input type="hidden" class="form-control" ref="iuser" v-model="user.nick">
                 </div>
-            </div>
                 
-                
-            <div class="">
-                <label for="" class="form-label">매장 선택</label>
-                <div>
-                    <button @click="[showModal, showModalEvent()]" id="btnNewFeedModal" data-bs-toggle="modal" data-bs-target="#newFeedModal">모달 열기</button>
+        <!-- 모달 -->
+            <div class="mb-3 row">
+                <label for="" class="col-md-3 col-form-label">매장 선택</label>
+                <div class="d-flex column col-md-9">
+                    <button class="px-4" @click="[showModal, showModalEvent()]" id="btnNewFeedModal" data-bs-toggle="modal" data-bs-target="#newFeedModal">
+                        검색
+                    </button>
                         <div class="modal fade" id="newFeedModal" tabindex="-1" aria-labelledby="newFeedModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centerd modal-xl">
+                            <div class="modal-dialog modal-dialog-centerd modal-lg modal-dialog-scrollable">
                                 <div class="modal-content" id="newFeedModalContent">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="newFeedModalLabel">매장 찾기</h5>
@@ -54,32 +52,34 @@
                                     <div class="modal-body" id="id-modal-body">
                                         <slot name="body">
                                             <div class="input-group align-items-center">
-                                                <div class="infiniteScroll">
-                                                    <div>
-                                                        <select class="form-select" @change="changeAreaCate1" v-model="selectedAreaCate1">
-                                                            <option value="" >시/도 선택</option>
-                                                            <option :value="key" v-for="item, key in AreaCate1" :key="key">
-                                                                {{ key }}
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                        <div class="input-group align-items-center">
-                                                            <input type="text" class="form-control radious" v-model="searchRest" @keyup.enter="searchArea()" placeholder="" aria-label="Username" aria-describedby="basic-addon1">
+                                                    <div class="input-group align-items-center mb-3">
+                                                        <div>
+                                                            <select class="form-select md-5" @change="changeAreaCate1" v-model="selectedAreaCate1">
+                                                                <option value="" >시/도 선택</option>
+                                                                <option :value="key" v-for="item, key in AreaCate1" :key="key">
+                                                                    {{ key }}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                            <input type="text" class="form-control radious ms-3 me-2" v-model="searchRest" @keyup.enter="searchArea()" placeholder="" aria-label="Username" aria-describedby="basic-addon1">
                                                             <a href="#" role="button" @click="searchArea()">
-                                                                <span class="search_icon"><img src="../assets/search.png"></span>
+                                                                <span class="search_icon ms-2"><img src="../assets/search.png"></span>
                                                             </a>
                                                         </div>
-                                                    <div>
-                                                        <!-- <h4>{{ getSearchWord }}</h4> -->
-                                                    </div>
+                                                <!-- 모달 검색 결과 뜨는 부분 -->
+                                                <div class="row">
                                                     <div  v-for="rest of searchList" :key="rest">
-                                                        <div @click="getRestInfo(rest.name, rest.address)" style="cursor:pointer;"  data-bs-dismiss="modal">
-                                                            <div style="width:100px;height:100px;"><img :src=rest.thumUrl style="width:100%;height:100%;"></div>
-                                                            <div>
-                                                                가게 이름 : <input type="hidden" id="name" v-model="rest.name" >{{ rest.name }}
-                                                            </div>
-                                                            <div>
-                                                                가게 주소 : <input type="hidden" v-model="rest.address">{{rest.address}}
+                                                        <div class="" @click="getRestInfo(rest.name, rest.address)" style="cursor:pointer;"  data-bs-dismiss="modal">
+                                                            <div class="d-flex column pb-3">
+                                                                <div class="col-4" style="width:100px;height:100px;"><img :src=rest.thumUrl style="width:100%;height:100%;" class="col-4"></div>
+                                                                <div class="ps-4 d-flex flex-column align-items-start justify-content-center">
+                                                                    <div class="mb-1">
+                                                                        가게 이름 : <input type="hidden" id="name" v-model="rest.name" >{{ rest.name }}
+                                                                    </div>
+                                                                    <div class="">
+                                                                        가게 주소 : <input type="hidden" v-model="rest.address">{{rest.address}}
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <hr>
                                                         </div>
@@ -95,7 +95,7 @@
                             </div>
                         </div>
                         <div>
-                            <input type="" class="form-control" ref="address" :value="restInfo.name" v-if="getSearchWord !== ''" readonly/>
+                            <input type="" class="form-control ms-3" ref="address" :value="restInfo.name" v-if="getSearchWord !== ''" readonly/>
                         </div>
                 </div>
             </div>
@@ -410,10 +410,7 @@ export default {
 </script>
 
 <style scoped>
-.infiniteScroll {
-    overflow: auto;
-    height: 50vh;
-    /* border: 2px solid #dce4ec;
-    border-radius: 5px; */
+::-webkit-scrollbar {
+    display: none;
 }
 </style>
