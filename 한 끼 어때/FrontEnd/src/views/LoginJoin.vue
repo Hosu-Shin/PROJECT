@@ -15,9 +15,10 @@
                     <span class="errormsg">{{ emailError }}</span>
                     <span class="errormsg">{{ duplication }}</span>
                     <div class="infield">
-                        <input type="password" placeholder="Password" ref="pw" v-model="inputUser.pw"/>
+                        <input type="password" placeholder="Password" ref="pw" v-model="inputUser.pw" @input="isPW()" />
                         <label></label>
                     </div>
+                    <span class="errormsg">{{ pwError }}</span>
                     <div class="d-flex flex-row infield">
                         <select class="mt-2 mb-2 me-1" :key="i" v-model="inputUser.birthYear">
                             <option value="0">birthYear</option>
@@ -87,6 +88,7 @@ export default {
             },
             duplication: '',
             emailError: '',
+            pwError: ''
         }
     },
     methods:{
@@ -126,44 +128,8 @@ export default {
             const data = await this.$post('/user/signup', params);                       
             params.iuser = data.result;
             this.$store.commit('user', params);
+            window.location.href = "http://localhost:8080/";
         },
-
-
-
-    
-
-        GoogleLogin(){ 
-            var self = this;
-            window.gapi.signin2.render('my-signin2', {
-                scope:'profile email',
-                width: 240,
-                height: 50,
-                longtitle: true,
-                theme: 'dark',
-                onsuccess: this.GoogleLoginSuccess,
-                onfailure: this.GoogleLoginFailure,
-            });
-
-                setTimeout(function () {
-                    if (!self.googleLoginCheck) {
-                    const auth = window.gapi.auth2.getAuthInstance();
-                    auth.isSignedIn.get();
-                    document.querySelector('.abcRioButton').click();
-                    }
-                }, 1000)
-            },
-            async GoogleLoginSuccess(googleUser) {
-            const googleEmail = googleUser.getBasicProfile().getEmail();
-            if (googleEmail !== 'undefined') {
-                console.log(googleEmail);
-            }
-            },
-            GoogleLoginFailure(error) {
-                console.log(error);
-        },
-
-
-
         async signin() {
             if(this.inputUser.email === "") {
                 this.$refs.email.focus();
@@ -246,6 +212,16 @@ export default {
                 this.emailError = '';
             }
         },
+        isPW() {
+            const regExp = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,16}$/;
+            const check = regExp.test(this.inputUser.pw);
+
+            if(!check) {
+                this.pwError = '비밀번호는 영문/숫자/특수문자(!@#$%^&*)를 포함하여 8~16자로 입력해야합니다.';
+            } else {
+                this.pwError = '';
+            }
+        }
     },
 
     created(){

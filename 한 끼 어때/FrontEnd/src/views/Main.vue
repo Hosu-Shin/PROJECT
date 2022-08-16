@@ -1,23 +1,28 @@
 <template>
-  <main>
-    <router-link to="/BobfChat">채팅 잠시 실례합니다</router-link>
+<div>
+  <main class="weather">
     <div class="container">    
-      <div class="mb-3 d-flex justify-content-end" v-if="weatherOk === true">
+      <div class="today_weather mt-5">
+        <h1>오늘의 <span>날씨</span></h1>
+        <h5><span>날씨</span>에 따라 <span>메뉴</span>를 추천해드립니다.</h5>
+        </div>
+      <div class="mb-3 mt-1 d-flex justify-content-end" v-if="weatherOk === true">
+        
         <div class="d-flex flex-column justify-content-center align-items-end">
           <div id="weatherText">
             {{ temp }}
             {{ weather }}
           </div>
-          <span class="text-sm color-gray">{{ today }} 기준 <span class="pointer" @click="askForCoords">🔄</span></span>
+          <span class="text-sm color-black">{{ today }} 기준 <span class="pointer" @click="askForCoords">🔄</span></span>
         </div>
         <div id="weatherIcon">
           <img :src="'http://openweathermap.org/img/wn/'+wicon+'@2x.png'">
         </div>
       </div>
 
-      <div class="card-group text-center">
+      <div class="card-group text-center mb-5">
         <div class="card" v-for="item in menuList" :key="item">
-          <div class="card-body pointer" @click="clickList(item.menucd)">
+          <div class="card-body pointer d-flex row justify-content-center" @click="clickList(item.menucd)">
             <div class="menuimg"><img :src="item.path"></div>
             <h5 class="card-title m-0">{{ item.menucd }}</h5>
           </div>
@@ -25,10 +30,33 @@
       </div>
     </div>
   </main>
+  
+  <main>
+    <div class="container">
+       <div class="bob_list pt-5 mb-4">
+          <h5><span>밥</span> 같이 먹을 사람 <span>구함</span>!!</h5>
+          <h1><span>밥</span>친 구하기<img src="../assets/smile.svg"></h1>
+       </div>
+       
+       <div class="mt-3 bob_write">
+           <div class="card-group text-center mb-5">
+             <div class="card" v-for="bob in bobf" :key="bob">
+                <div class="card-body pointer d-flex row justify-content-center" @click="bobList(bob.bobf)">
+                <div class="menuimg"><img :src="bob.img_path">
+             </div>
+             <h5 class="card-title m-0">{{ bob.bobf }}</h5>
+           </div>
+          </div>
+        </div>
+       </div>
+    
+    </div>
+  </main>
+</div>
+ 
 </template>
 
 <script>
-
 export default {
   data(){
     return{
@@ -121,7 +149,10 @@ export default {
   computed: {
     getCurrentLoc() {
       return this.$store.getters.currentLoc;
-    }
+    },
+    user() {
+      return this.$store.state.user;
+    },
   },
   methods: {
     //검색리스트에 뽀려가욘~@--
@@ -145,7 +176,6 @@ export default {
           lat: lat,
           lon: lon
       }
-      console.log('dkdkdkdk',params)
       this.$store.commit('currentLoc', params);
 
       const data = await this.getWeather(lat, lon);
@@ -176,29 +206,80 @@ export default {
     async clickList(menucd) {
       const params = await this.naverSearch(menucd, this.lon, this.lat)
       await this.searchList(params)
-      const restList = await this.getRestList(menucd, this.lon, this.lat)
+      const restList = await this.getRestList(menucd, this.lon, this.lat, this.user.iuser)
       await this.getMenuList();
 
       this.$store.commit('restList', restList)
       this.$store.commit('setSearchWord', menucd);
       this.$router.push( {path: '/SearchList'} );
+    },
+    async bobList(bobf){
+      
     }
   },
   created() {
     this.askForCoords();
   },
   updated(){
-    this.askForCoords();
+    // this.askForCoords();
   }
 }
 </script>
 
 <style scoped>
+@font-face {
+    font-family: 'Cafe24Ssurround';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
   .bold { font-weight: bold; }
   .border-carrot { border-color: #F26C38; }
   .text-sm { font-size: 0.8rem; }
-  .color-gray { color: #ccc; }
   .pointer { cursor: pointer; }
-  .menuimg { width: 250px; height: 270px; }
+  .menuimg { width: 270px; height: 290px; }
   .menuimg > img { width: 100%; height: 100%; object-fit: contain; }
+  main{
+    overflow: auto;
+  }
+  .weather{
+    background-image: url( "../assets/main-background.png");
+    background-size: cover;
+    height:670px;
+  }
+  .bob_list h1 img{
+    width:60px;
+    padding-left:10px;
+  }
+  h1{
+    font-family: 'Cafe24Ssurround';
+    font-weight: bold;
+    font-size: 50px;
+    letter-spacing: 1px;
+  }
+  h5{
+    font-weight: 500;
+    letter-spacing:1px;
+  }
+  .today_weather span , .bob_list span{
+    color:#F26C38;
+  }
+  #weatherIcon img{
+    animation: move 3s infinite;
+  }
+  @keyframes move{
+    from {
+        transform:translateY(0px);
+    }
+    50%{ 
+        transform:translateY(-5px);
+    }
+    to{
+        transform:translateY(0px);
+    }
+  }
+  .card{
+    margin-right:15px;
+    border-radius:10px !important;
+  }
 </style>
