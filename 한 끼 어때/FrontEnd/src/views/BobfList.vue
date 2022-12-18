@@ -1,8 +1,8 @@
 <template>
 <main class="container mt-5">
   <div>
-      <div class="">
-        <h1 class="fl">밥 친구 구하기</h1>
+       <div class="">
+        <h1 class="fl"><span class="point_title">밥</span> 친구 구하기</h1>
         <div class="plus_btn" v-if="user.iuser !== undefined"><router-link to="/BobfWrite"><img src="../assets/plus.png"></router-link></div>
         <div class="row ">
           <!-- 지역 셀렉트1 -->
@@ -50,14 +50,14 @@
 
       <div class="row">
         <div class="card-list col-xl-3" :key="ibobf" v-for="ibobf in paginatedData">
-        <div class="card" style="width: 18rem; cursor:pointer;" @click="goToDetail(ibobf.ibobf)">
+        <div class="card" id="listClick" style="width: 18rem; cursor:pointer;" @click="goToDetail(ibobf.ibobf)">
           <a class="card-image" target="_blank">
             <div>
               <img alt="이미지" class="card-img-top" :src="`/static/img/bobf/${ibobf.img_path}`" style="height: 300px; object-fit: cover" onerror="this.src='https://images.unsplash.com/photo-1556761223-4c4282c73f77?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80'">
             </div>
           </a>
           <a class="card-description" target="_blank">
-            <h3 class="card-title title">{{ ibobf.title }}</h3>
+            <h5 class="card-title title">{{ ibobf.title }}</h5>
             <div class="d-flex justify-content-between align-ites-center">
                 <small class="text-dark">{{ ibobf.sido }} / {{ ibobf.gugun}}</small>
                 <small class="text-dark" v-if="ibobf.cur_mem === ibobf.total_mem ? this.member = '모집완료' : this.member = '모집중'">{{this.member}}</small>
@@ -282,7 +282,6 @@ export default {
     goToDetail(ibobf) {
       const res = ibobf
       this.$router.push( {name: 'BobfDetail', params: { ibobf: res }} );
-      // this.$router.push( {path: '/BobfDetail/ibobf'} );
     },
 
     
@@ -337,6 +336,9 @@ h1 {
   font-weight: bold;
   font-size: 50px;
   letter-spacing: 1px;
+}
+.point_title {
+  color:#F26C38;
 }
 
 /* Lazy Load Styles */
